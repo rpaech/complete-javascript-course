@@ -90,4 +90,6 @@ function calcAverage(arr) {
 console.log(calcAverage(totals));
 
 const x = 22 + 1 / 2;
-const y = "Robert's ball";
+const y = "Robert's cat";
+
+console.log(x, y);
