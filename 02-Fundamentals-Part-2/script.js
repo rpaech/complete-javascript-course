@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // let v = false;
 // console.log(typeof(v));
@@ -20,7 +20,7 @@
 // }
 // console.log(myFunc2(5, 2));
 
-const arr1 = [1, 'foo', 3];
+const arr1 = [1, "foo", 3];
 // const arr2 = new Array(1, 2, 3);
 // console.log(arr1, arr2, arr1 == arr2, arr1 === arr2);
 // arr1.push("foo");
@@ -66,25 +66,28 @@ let bills = [22, 295, 176, 440, 37, 105, 10, 1100, 86, 52];
 let tips = [];
 let totals = [];
 
-function calcTip (billValue) {
-    return billValue * (50 <= billValue && billValue <= 300 ? 0.15 : 0.2);
+function calcTip(billValue) {
+  return billValue * (50 <= billValue && billValue <= 300 ? 0.15 : 0.2);
 }
 
-bills.forEach(v => tips.push(calcTip(v)))
+bills.forEach((v) => tips.push(calcTip(v)));
 
 for (let i = 0; i < bills.length; i++) {
-    tips.push(calcTip(bills[i]))
-    totals.push(bills[i] + tips[i]);
+  tips.push(calcTip(bills[i]));
+  totals.push(bills[i] + tips[i]);
 }
 
 console.log(bills);
 console.log(tips);
 console.log(totals);
 
-function calcAverage (arr) {
-    let sum = 0;
-    arr.forEach(e => sum += e);
-    return sum / arr.length;
+function calcAverage(arr) {
+  let sum = 0;
+  arr.forEach((e) => (sum += e));
+  return sum / arr.length;
 }
 
 console.log(calcAverage(totals));
+
+const x = 22 + 1 / 2;
+const y = "Robert's ball";
