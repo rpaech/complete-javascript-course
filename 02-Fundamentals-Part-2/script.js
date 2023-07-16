@@ -72,6 +72,7 @@ function calcTip(billValue) {
 
 bills.forEach((v) => tips.push(calcTip(v)));
 
+debugger;
 for (let i = 0; i < bills.length; i++) {
   tips.push(calcTip(bills[i]));
   totals.push(bills[i] + tips[i]);
