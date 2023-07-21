@@ -109,34 +109,34 @@ const game = {
   },
 };
 
-// Task #1
-const [players1, players2] = game.players;
-console.log(players1, players2);
+// // Task #1
+// const [players1, players2] = game.players;
+// console.log(players1, players2);
 
-// Task #2
-const [gk, ...fieldPlayers] = players1;
-console.log(gk, fieldPlayers);
+// // Task #2
+// const [gk, ...fieldPlayers] = players1;
+// console.log(gk, fieldPlayers);
 
-// Task #3
-const allPlayers = [...players1, ...players2];
-console.log(allPlayers);
+// // Task #3
+// const allPlayers = [...players1, ...players2];
+// console.log(allPlayers);
 
-// Task #4
-const players1Final = [...players1, "Thiago", "Coutinho", "Perisic"];
-console.log(players1Final);
+// // Task #4
+// const players1Final = [...players1, "Thiago", "Coutinho", "Perisic"];
+// console.log(players1Final);
 
-// Task #5
-const { team1, x: draw, team2 } = game.odds;
-console.log(team1, draw, team2);
+// // Task #5
+// const { team1, x: draw, team2 } = game.odds;
+// console.log(team1, draw, team2);
 
-// Task #6
-function printGoals(...players) {
-  console.log(...players, players.length);
-}
-printGoals(...game.scored);
+// // Task #6
+// function printGoals(...players) {
+//   console.log(...players, players.length);
+// }
+// printGoals(...game.scored);
 
-// Task #7
-console.log(team1 <= team2 ? game.team1 : game.team2);
+// // Task #7
+// console.log(team1 <= team2 ? game.team1 : game.team2);
 
 ///////////////////////////////////////
 // Coding Challenge #2
@@ -165,11 +165,40 @@ BONUS: Create an object called 'scorers' which contains the names of the players
 GOOD LUCK 😀
 */
 
-// TODO: Task #1
+// // Task #1
 
-// TODO: Task #2
+// for (const [g, p] of game.scored.entries()) {
+//   console.log(`Goal ${g + 1}: ${p}`);
+// }
 
-// TODO: Task #3
+// // Task #2
+
+// let total = 0;
+// let count = 0;
+// for (const k in game.odds) {
+//   total += game.odds[k];
+//   count++;
+// }
+// console.log(`Average odds: ${total / count}`);
+
+// // Task #3
+
+// for (const [key, v] of Object.entries(game.odds)) {
+//   const outcome = key === "x" ? "a draw" : `${game[key]} to win`;
+//   console.log(`Odds of ${outcome}: ${v}`);
+// }
+
+// // Bonus Task
+
+// let scorers = {};
+// for (const player of game.scored) {
+//   if (scorers[player]) {
+//     scorers[player]++;
+//   } else {
+//     scorers[player] = 1;
+//   }
+// }
+// console.log(scorers);
 
 ///////////////////////////////////////
 // Coding Challenge #3
@@ -203,10 +232,83 @@ const gameEvents = new Map([
   [92, "🔶 Yellow card"],
 ]);
 
-// TODO: Task #1
+// // Task #1
 
-// TODO: Task #1
+// // let eventSet = new Set();
+// // for (const [, event] of gameEvents) eventSet.add(event);
+// // const events = [...eventSet];
 
-// TODO: Task #2
+// const events = [...new Set(gameEvents.values())];
+// console.log(events);
 
-// TODO: Task #3
+// // Task #2
+
+// gameEvents.delete(64);
+// console.log(gameEvents);
+
+// // Task #3
+
+// console.log(
+//   `During the game, an event happened, on average, every ${
+//     90 / gameEvents.size
+//   } minutes`
+// );
+
+// // Task #4
+
+// for (const [time, event] of gameEvents.entries())
+//   console.log(
+//     `[${time / 90 <= 0.5 ? "FIRST" : "SECOND"} HALF] ${time}: ${event}`
+//   );
+
+///////////////////////////////////////
+// Coding Challenge #4
+
+/* 
+Write a program that receives a list of variable names written in underscore_case and convert them to camelCase.
+
+The input will come from a textarea inserted into the DOM (see code below), and conversion will happen when the button is pressed.
+
+THIS TEST DATA (pasted to textarea)
+underscore_case
+ first_name
+Some_Variable 
+  calculate_AGE
+delayed_departure
+
+SHOULD PRODUCE THIS OUTPUT (5 separate console.log outputs)
+underscoreCase      ✅
+firstName           ✅✅
+someVariable        ✅✅✅
+calculateAge        ✅✅✅✅
+delayedDeparture    ✅✅✅✅✅
+
+HINT 1: Remember which character defines a new line in the textarea 😉
+HINT 2: The solution only needs to work for a variable made out of 2 words, like a_b
+HINT 3: Start without worrying about the ✅. Tackle that only after you have the variable name conversion working 😉
+HINT 4: This challenge is difficult on purpose, so start watching the solution in case you're stuck. Then pause and continue!
+
+Afterwards, test with your own test data!
+
+GOOD LUCK 😀
+*/
+
+function toCamelCase(varName) {
+  const wordList = varName.toLowerCase().trim().split("_");
+  for (let i = 1; i < wordList.length; i++) {
+    const word = wordList[i];
+    wordList[i] = word.replace(word[0], word[0].toUpperCase());
+    // wordList[i] =
+    //   wordList[i].slice(0, 1).toUpperCase() +
+    //   wordList[i].slice(1).toLowerCase();
+  }
+  const result = "".concat(...wordList);
+}
+
+toCamelCase("underscore_case");
+toCamelCase(" first_name");
+toCamelCase("Some_Variable ");
+toCamelCase("  calculate_AGE");
+toCamelCase("delayed_departured");
+toCamelCase("  dog  ");
+toCamelCase("  a_B  ");
