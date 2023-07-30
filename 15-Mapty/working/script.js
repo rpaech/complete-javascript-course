@@ -66,19 +66,41 @@ class App {
   #workouts = [];
 
   constructor() {
+    this._getLocalStorage();
     this._getPosition();
     form.addEventListener("submit", (e) => this._newWorkout(e));
     inputType.addEventListener("change", (e) => this._toggleElevationField(e));
+    containerWorkouts.addEventListener("click", (e) => this._moveToPopup(e));
+  }
+
+  _moveToPopup(e) {
+    const workoutElmt = e.target.closest(".workout");
+
+    if (!workoutElmt) return;
+
+    const workout = this.#workouts.find((w) => w.id === workoutElmt.dataset.id);
+    this.#map.setView(workout.coords, 13, {
+      animate: true,
+      pan: { duration: 1 },
+    });
   }
 
   _getPosition() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        this._loadMap.bind(this),
-        function () {
-          alert("Could not get your position.");
-        }
+        (e) => {
+          this._loadMap(e);
+          this._loadWorkouts();
+        },
+        () => alert("Could not get your position.")
       );
+    }
+  }
+
+  _loadWorkouts() {
+    for (const w of this.#workouts) {
+      this._renderWorkout(w);
+      this._renderWorkoutMarker(w);
     }
   }
 
@@ -90,11 +112,6 @@ class App {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
-
-    L.marker([latitude, longitude])
-      .addTo(this.#map)
-      .bindPopup("You're somewhere <br>near here.")
-      .openPopup();
 
     this.#map.on("click", (e) => this._showForm(e));
   }
@@ -163,6 +180,24 @@ class App {
     this._renderWorkoutMarker(workout);
     this._renderWorkout(workout);
     this._hideForm();
+    this._setLocalStorage();
+  }
+
+  reset() {
+    localStorage.removeItem("workouts");
+    location.reload();
+  }
+
+  _setLocalStorage() {
+    localStorage.setItem("workouts", JSON.stringify(this.#workouts));
+  }
+
+  _getLocalStorage() {
+    const data = localStorage.getItem("workouts");
+
+    if (!data) return;
+
+    this.#workouts = JSON.parse(data);
   }
 
   _renderWorkoutMarker(workout) {
