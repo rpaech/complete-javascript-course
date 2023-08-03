@@ -4,28 +4,67 @@ import fracty from "fracty";
 class RecipeView {
   #parentEl = document.querySelector(".recipe");
   #data;
+  #errorMessage = "No recipes found for your query. Please try again!";
+  #successMessage =
+    "Start by searching for a recipe or an ingredient. Have fun!";
 
   render(data) {
     this.#data = data;
     const markup = this.#generateMarkup();
-    this.#clear();
-    this.#parentEl.insertAdjacentHTML("afterbegin", markup);
+    this.#updateView(markup);
   }
 
   renderSpinner(parentEl) {
-    const html = `
+    const markup = `
       <div class="spinner">
         <svg>
           <use href="${icons}#icon-loader"></use>
         </svg>
       </div>
     `;
-    this.#parentEl.innerHTML = ";";
-    this.#parentEl.insertAdjacentHTML("afterbegin", html);
+    this.#updateView(markup);
   }
 
-  #clear() {
+  renderError(message = this.#errorMessage) {
+    const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="${icons}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+    this.#updateView(markup);
+  }
+
+  renderMessage(message = this.#successMessage) {
+    const markup = `
+      <div class="message">
+        <div>
+          <svg>
+            <use href="${icons}#icon-smile"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+  }
+
+  addRenderHandler(callbackFn) {
+    ["load", "hashchange"].forEach((event) =>
+      window.addEventListener(event, callbackFn)
+    );
+  }
+
+  #clearView() {
     this.#parentEl.innerHTML = "";
+  }
+
+  #updateView(markup) {
+    this.#clearView();
+    this.#parentEl.insertAdjacentHTML("afterbegin", markup);
   }
 
   #generateMarkup() {
