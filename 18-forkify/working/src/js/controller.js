@@ -18,6 +18,9 @@ async function controlRecipes() {
     if (!id) return;
 
     recipeView.renderSpinner();
+
+    resultsView.update(model.getSearchResultsPage());
+
     await model.loadRecipe(id);
     recipeView.render(model.state.recipe);
   } catch (error) {
@@ -46,8 +49,14 @@ function controlPagination(page) {
   paginationView.render(model.state.search);
 }
 
+function controlServings(servings) {
+  model.updateServings(servings);
+  recipeView.update(model.state.recipe);
+}
+
 function init() {
   recipeView.addRenderHandler(controlRecipes);
+  recipeView.addServingsHandler(controlServings);
   searchView.addSearchHandler(controlSearch);
   paginationView.addButtonHandler(controlPagination);
 }
