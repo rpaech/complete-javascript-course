@@ -4,6 +4,8 @@ import searchView from "./views/searchView";
 import resultsView from "./views/resultsView";
 import paginationView from "./views/paginationView";
 import bookmarksView from "./views/bookmarksView";
+import addRecipeView from "./views/addRecipeView";
+import { WINDOW_TIMEOUT_DURATION } from "./config";
 
 import "core-js/stable";
 import "regenerator-runtime/runtime";
@@ -56,18 +58,42 @@ function controlServings(servings) {
   recipeView.update(model.state.recipe);
 }
 
-function controlBookmark() {
+function controlBookmarkButton() {
   if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
   else model.deleteBookmark(model.state.recipe);
   recipeView.update(model.state.recipe);
   bookmarksView.render(model.state.bookmarks);
 }
 
+function controlBookmarks() {
+  bookmarksView.render(model.state.bookmarks);
+}
+
+async function controlAddRecipe(newRecipe) {
+  try {
+    addRecipeView.renderSpinner();
+    await model.uploadRecipe(newRecipe);
+    recipeView.render(model.state.recipe);
+    bookmarksView.render(model.state.bookmarks);
+    window.history.pushState(null, "", `#${model.state.recipe.id}`);
+    addRecipeView.renderMessage();
+    setTimeout(
+      () => addRecipeView.toggleWindowVisibility(),
+      WINDOW_TIMEOUT_DURATION
+    );
+  } catch (error) {
+    console.warn(error);
+    addRecipeView.renderError(error.message);
+  }
+}
+
 function init() {
+  bookmarksView.addRenderHandler(controlBookmarks);
   recipeView.addRenderHandler(controlRecipes);
   recipeView.addServingsHandler(controlServings);
-  recipeView.addAddBookmarkHandler(controlBookmark);
+  recipeView.addAddBookmarkHandler(controlBookmarkButton);
   searchView.addSearchHandler(controlSearch);
   paginationView.addButtonHandler(controlPagination);
+  addRecipeView.addUploadHandler(controlAddRecipe);
 }
 init();
